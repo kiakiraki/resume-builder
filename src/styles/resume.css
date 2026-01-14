@@ -1,0 +1,480 @@
+/* 厚労省様式履歴書 CSS */
+
+:root {
+  --border-color: #000;
+  --bg-white: #fff;
+  --text-color: #000;
+  --font-size-base: 9pt;
+  --font-size-small: 7.5pt;
+  --font-size-title: 16pt;
+  --font-size-name: 14pt;
+  --line-height: 1.3;
+  --page-width: 297mm;
+  --page-height: 210mm;
+  --page-padding: 6mm;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--font-size-base);
+}
+
+body {
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+  color: var(--text-color);
+  background: #f5f5f5;
+  line-height: var(--line-height);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* メインコンテナ - A4横向き見開き */
+.resume {
+  width: var(--page-width);
+  height: var(--page-height);
+  margin: 10mm auto;
+  background: var(--bg-white);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 左右のページ */
+.page {
+  padding: var(--page-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+.left-page {
+  border-right: 1px solid var(--border-color);
+}
+
+/* タイトル行 */
+.title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10mm;
+  margin-bottom: 3mm;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--font-size-title);
+  font-weight: bold;
+  letter-spacing: 0.5em;
+}
+
+.date {
+  font-size: var(--font-size-base);
+}
+
+/* 氏名・写真エリア */
+.name-photo-area {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 0;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+/* 氏名テーブル */
+.name-table {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.name-table th,
+.name-table td {
+  border: 1px solid var(--border-color);
+  padding: 1.5mm;
+}
+
+.name-table .label-cell {
+  width: 16mm;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: normal;
+  font-size: var(--font-size-small);
+}
+
+.name-table .small-label {
+  font-size: 6pt;
+}
+
+.name-table .kana-cell {
+  font-size: var(--font-size-small);
+  height: 5mm;
+  vertical-align: bottom;
+  padding-left: 2mm;
+}
+
+.name-table .name-cell {
+  font-size: var(--font-size-name);
+  height: 12mm;
+  vertical-align: middle;
+  padding-left: 2mm;
+  letter-spacing: 0.2em;
+}
+
+/* 生年月日・性別テーブル */
+.birth-gender-table {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: -1px;
+}
+
+.birth-gender-table th,
+.birth-gender-table td {
+  border: 1px solid var(--border-color);
+  padding: 1.5mm;
+}
+
+.birth-cell {
+  text-align: center;
+  font-size: var(--font-size-base);
+  height: 6mm;
+}
+
+.gender-label {
+  width: 10mm;
+  text-align: center;
+  font-weight: normal;
+  font-size: var(--font-size-small);
+}
+
+.gender-cell {
+  width: 12mm;
+  text-align: center;
+}
+
+/* 写真エリア */
+.photo-area {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  padding-left: 2mm;
+}
+
+.photo-box {
+  width: 24mm;
+  height: 32mm;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.photo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.photo-placeholder {
+  text-align: center;
+  font-size: 6pt;
+  color: #666;
+  padding: 1mm;
+}
+
+.photo-placeholder span {
+  display: block;
+  margin-bottom: 1mm;
+  font-size: 7pt;
+}
+
+.photo-guide {
+  text-align: left;
+  line-height: 1.2;
+}
+
+.photo-guide p {
+  margin: 0;
+  font-size: 5pt;
+}
+
+/* 住所テーブル */
+.address-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: -1px;
+  flex-shrink: 0;
+  table-layout: fixed;
+}
+
+.address-table th,
+.address-table td {
+  border: 1px solid var(--border-color);
+  padding: 1mm 1.5mm;
+  font-size: var(--font-size-small);
+}
+
+.address-table .label-cell {
+  width: 16mm;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: normal;
+  font-size: var(--font-size-small);
+}
+
+.address-table .small-label {
+  font-size: 6pt;
+}
+
+.address-table .postal-kana-cell {
+  font-size: var(--font-size-small);
+  height: 5mm;
+  vertical-align: middle;
+}
+
+.address-table .postal-code {
+  margin-right: 3mm;
+}
+
+.address-table .address-kana {
+  font-size: 6pt;
+}
+
+.address-table .address-cell {
+  height: 9mm;
+  vertical-align: top;
+  padding-top: 1mm;
+  font-size: var(--font-size-base);
+}
+
+.address-table .contact-label {
+  width: 12mm;
+  text-align: center;
+  font-weight: normal;
+  font-size: var(--font-size-small);
+  vertical-align: middle;
+}
+
+.address-table .contact-value {
+  width: 28mm;
+  text-align: center;
+  vertical-align: middle;
+  font-size: var(--font-size-small);
+  word-break: break-all;
+}
+
+.address-table .hint {
+  font-size: 5pt;
+  color: #666;
+}
+
+.contact-address-table {
+  margin-top: -1px;
+}
+
+/* 学歴・職歴テーブル */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: -1px;
+  flex: 1;
+  min-height: 0;
+}
+
+.history-table th,
+.history-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.8mm 1.5mm;
+  font-size: var(--font-size-base);
+}
+
+.history-table thead th {
+  background: var(--bg-white);
+  font-weight: normal;
+  text-align: center;
+  height: 5mm;
+}
+
+.history-table .year-col {
+  width: 14mm;
+}
+
+.history-table .month-col {
+  width: 8mm;
+}
+
+.history-table .content-col {
+  /* 残りの幅 */
+}
+
+.history-table .year-cell,
+.history-table .month-cell {
+  text-align: center;
+}
+
+.history-table .content-cell {
+  padding-left: 2mm;
+}
+
+.history-table .content-cell.center {
+  text-align: center;
+  padding-left: 0;
+}
+
+.history-table tbody tr {
+  height: 5.5mm;
+}
+
+.history-table .header-row td {
+  font-weight: normal;
+}
+
+/* 資格・免許テーブル */
+.license-table {
+  flex: 0 0 auto;
+}
+
+.license-table tbody tr {
+  height: 5.5mm;
+}
+
+/* 志望の動機セクション */
+.motivation-section {
+  border: 1px solid var(--border-color);
+  margin-top: -1px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.motivation-section .section-header {
+  font-size: var(--font-size-small);
+  padding: 1mm 1.5mm;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-white);
+  flex-shrink: 0;
+}
+
+.motivation-content {
+  padding: 1.5mm 2mm;
+  font-size: var(--font-size-base);
+  white-space: pre-line;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* 本人希望記入欄 */
+.preferences-section {
+  border: 1px solid var(--border-color);
+  margin-top: -1px;
+  height: 20mm;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.preferences-section .section-header {
+  font-size: 6pt;
+  padding: 1mm 1.5mm;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-white);
+  flex-shrink: 0;
+}
+
+.preferences-content {
+  padding: 1.5mm 2mm;
+  font-size: var(--font-size-base);
+  white-space: pre-line;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* 注釈フッター */
+.footer-note {
+  position: absolute;
+  bottom: 2mm;
+  left: var(--page-padding);
+  font-size: 6pt;
+  color: #333;
+}
+
+/* 印刷用スタイル */
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
+@media print {
+  html, body {
+    width: var(--page-width);
+    height: var(--page-height);
+    margin: 0;
+    padding: 0;
+    background: white;
+    overflow: hidden;
+  }
+
+  .resume {
+    width: var(--page-width);
+    height: var(--page-height);
+    margin: 0;
+    box-shadow: none;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+  }
+
+  .page {
+    padding: var(--page-padding);
+    overflow: hidden;
+  }
+}
+
+/* 画面表示用スタイル */
+@media screen {
+  body {
+    padding: 20px;
+  }
+
+  .resume {
+    border: 1px solid #ccc;
+  }
+}
+
+/* レスポンシブ対応（小さい画面ではスクロール） */
+@media screen and (max-width: 320mm) {
+  body {
+    padding: 10px;
+  }
+
+  .resume {
+    transform-origin: top left;
+    transform: scale(0.9);
+  }
+}
+
+@media screen and (max-width: 280mm) {
+  .resume {
+    transform: scale(0.8);
+  }
+}
+
+@media screen and (max-width: 240mm) {
+  .resume {
+    transform: scale(0.7);
+  }
+}
