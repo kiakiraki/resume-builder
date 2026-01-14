@@ -5,6 +5,6 @@ import { defineConfig } from 'astro/config';
 // カスタムドメインの場合は base: '/' のままでOK
 export default defineConfig({
   output: 'static',
-  site: 'https://example.github.io',
+  site: 'https://kiakiraki.github.io',
   base: '/resume-builder/',
 });
