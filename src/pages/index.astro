@@ -1,0 +1,262 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import { parse } from 'yaml';
+import '../styles/resume.css';
+
+const dataPath = path.resolve('./src/data/resume.yaml');
+const resume = parse(fs.readFileSync(dataPath, 'utf8')) ?? {};
+
+const date = resume.date ?? '';
+const personal = resume.personal ?? {};
+const name = personal.name ?? {};
+const birthDate = personal.birth_date ?? {};
+const address = resume.address ?? {};
+const contact = resume.contact ?? {};
+const history = resume.history ?? [];
+const licenses = resume.licenses ?? [];
+const motivation = resume.motivation ?? '';
+const preferences = resume.preferences ?? '';
+
+const photoSrc = personal.photo || '';
+
+// 学歴・職歴を左右に分割（左側約16行、右側残り）
+const LEFT_HISTORY_ROWS = 16;
+const historyLeft = history.slice(0, LEFT_HISTORY_ROWS);
+const historyRight = history.slice(LEFT_HISTORY_ROWS);
+
+// 右側の学歴・職歴テーブルの行数
+const RIGHT_HISTORY_ROWS = 7;
+
+// 資格・免許テーブルの行数
+const LICENSE_ROWS = 6;
+
+// 空行を埋めるためのヘルパー
+const padRows = (arr: any[], count: number) => {
+  const result = [...arr];
+  while (result.length < count) {
+    result.push({ year: '', month: '', content: '' });
+  }
+  return result;
+};
+
+const historyLeftPadded = padRows(historyLeft, LEFT_HISTORY_ROWS);
+const historyRightPadded = padRows(historyRight, RIGHT_HISTORY_ROWS);
+const licensesPadded = padRows(licenses, LICENSE_ROWS);
+---
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>履歴書</title>
+  </head>
+  <body>
+    <main class="resume">
+      <!-- 左側（表面） -->
+      <section class="page left-page">
+        <!-- タイトル行 -->
+        <div class="title-row">
+          <h1 class="title">履 歴 書</h1>
+          <div class="date">{date}</div>
+        </div>
+
+        <!-- 氏名・写真エリア -->
+        <div class="name-photo-area">
+          <table class="name-table">
+            <tbody>
+              <tr class="kana-row">
+                <th class="label-cell" rowspan="2">
+                  <span class="small-label">ふりがな</span><br />
+                  氏　名
+                </th>
+                <td class="kana-cell">
+                  {name.sei_kana} {name.mei_kana}
+                </td>
+              </tr>
+              <tr class="name-row">
+                <td class="name-cell">
+                  {name.sei}　{name.mei}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="birth-gender-table">
+            <tbody>
+              <tr>
+                <td class="birth-cell">
+                  {birthDate.year}年{birthDate.month}月{birthDate.day}日生（満{birthDate.age}歳）
+                </td>
+                <th class="gender-label">性別</th>
+                <td class="gender-cell">{personal.gender}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="photo-area">
+            <div class="photo-box">
+              {photoSrc ? (
+                <img src={photoSrc} alt="証明写真" />
+              ) : (
+                <div class="photo-placeholder">
+                  <span>写真をはる位置</span>
+                  <div class="photo-guide">
+                    <p>写真をはる必要がある場合</p>
+                    <p>1. 縦 36〜40mm</p>
+                    <p>   横 24〜30mm</p>
+                    <p>2. 本人単身胸から上</p>
+                    <p>3. 裏面のりづけ</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <!-- 現住所 -->
+        <table class="address-table">
+          <tbody>
+            <tr class="kana-row">
+              <th class="label-cell" rowspan="2">
+                <span class="small-label">ふりがな</span><br />
+                現住所　〒
+              </th>
+              <td class="postal-kana-cell">
+                <span class="postal-code">{address.postal_code}</span>
+                <span class="address-kana">{address.kana}</span>
+              </td>
+              <th class="contact-label">電話</th>
+              <td class="contact-value">{address.phone}</td>
+            </tr>
+            <tr class="address-row">
+              <td class="address-cell">
+                {address.line1}<br />{address.line2}
+              </td>
+              <th class="contact-label">E-mail</th>
+              <td class="contact-value">{address.email}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 連絡先 -->
+        <table class="address-table contact-address-table">
+          <tbody>
+            <tr class="kana-row">
+              <th class="label-cell" rowspan="2">
+                <span class="small-label">ふりがな</span><br />
+                連絡先　〒
+              </th>
+              <td class="postal-kana-cell">
+                {contact.postal_code ? (
+                  <>
+                    <span class="postal-code">{contact.postal_code}</span>
+                    <span class="address-kana">{contact.kana}</span>
+                  </>
+                ) : (
+                  <span class="hint">（現住所以外に連絡を希望する場合のみ記入）</span>
+                )}
+              </td>
+              <th class="contact-label">電話</th>
+              <td class="contact-value">{contact.phone}</td>
+            </tr>
+            <tr class="address-row">
+              <td class="address-cell">
+                {contact.line1}{contact.line2 && <br />}{contact.line2}
+              </td>
+              <th class="contact-label">E-mail</th>
+              <td class="contact-value">{contact.email}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 学歴・職歴（左側） -->
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th class="year-col">年</th>
+              <th class="month-col">月</th>
+              <th class="content-col">学 歴 ・ 職 歴（各別にまとめて書く）</th>
+            </tr>
+          </thead>
+          <tbody>
+            {historyLeftPadded.map((item) => (
+              <tr class={item.type === 'header' ? 'header-row' : ''}>
+                <td class="year-cell">{item.year}</td>
+                <td class="month-cell">{item.month}</td>
+                <td class={`content-cell ${item.type === 'header' || item.type === 'footer' ? 'center' : ''}`}>
+                  {item.content}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 右側（裏面） -->
+      <section class="page right-page">
+        <!-- 学歴・職歴（右側続き） -->
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th class="year-col">年</th>
+              <th class="month-col">月</th>
+              <th class="content-col">学 歴 ・ 職 歴（各別にまとめて書く）</th>
+            </tr>
+          </thead>
+          <tbody>
+            {historyRightPadded.map((item) => (
+              <tr class={item.type === 'header' ? 'header-row' : ''}>
+                <td class="year-cell">{item.year}</td>
+                <td class="month-cell">{item.month}</td>
+                <td class={`content-cell ${item.type === 'header' || item.type === 'footer' ? 'center' : ''}`}>
+                  {item.content}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <!-- 資格・免許 -->
+        <table class="history-table license-table">
+          <thead>
+            <tr>
+              <th class="year-col">年</th>
+              <th class="month-col">月</th>
+              <th class="content-col">資 格 ・ 免 許</th>
+            </tr>
+          </thead>
+          <tbody>
+            {licensesPadded.map((item) => (
+              <tr>
+                <td class="year-cell">{item.year}</td>
+                <td class="month-cell">{item.month}</td>
+                <td class="content-cell">{item.content}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        <!-- 志望の動機 -->
+        <div class="motivation-section">
+          <div class="section-header">志望の動機、特技、好きな学科、アピールポイントなど</div>
+          <div class="motivation-content">
+            {motivation}
+          </div>
+        </div>
+
+        <!-- 本人希望記入欄 -->
+        <div class="preferences-section">
+          <div class="section-header">本人希望記入欄（特に給料・職種・勤務時間・勤務地・その他についての希望などがあれば記入）</div>
+          <div class="preferences-content">
+            {preferences}
+          </div>
+        </div>
+      </section>
+
+      <!-- 注釈 -->
+      <footer class="footer-note">
+        ※「性別」欄：記載は任意です。未記載とすることも可能です。
+      </footer>
+    </main>
+  </body>
+</html>
