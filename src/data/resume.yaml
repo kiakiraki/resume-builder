@@ -38,8 +38,8 @@ contact:
 
 # 学歴・職歴（各別にまとめて書く）
 history:
-  - year: "平成20"
-    month: "4"
+  - year: ""
+    month: ""
     content: "学歴"
     type: "header"
   - year: "平成20"
