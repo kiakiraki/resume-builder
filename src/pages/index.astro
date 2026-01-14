@@ -18,7 +18,10 @@ const licenses = resume.licenses ?? [];
 const motivation = resume.motivation ?? '';
 const preferences = resume.preferences ?? '';
 
-const photoSrc = personal.photo || '';
+// publicフォルダのアセットはBASE_URLを考慮する
+const baseUrl = import.meta.env.BASE_URL;
+const photoPath = personal.photo || '';
+const photoSrc = photoPath ? `${baseUrl}${photoPath.replace(/^\//, '')}` : '';
 
 // 学歴・職歴を左右に分割（左側約16行、右側残り）
 const LEFT_HISTORY_ROWS = 16;
